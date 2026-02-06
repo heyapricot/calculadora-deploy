@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="es-MX">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Calculadora Financiera — Contigo</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              200: '#bfdbfe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+              800: '#1e40af',
+              900: '#1e3a5f',
+            }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    body { font-family: 'Inter', sans-serif; }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+      border: 3px solid #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    input[type="range"]::-moz-range-thumb {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: #2563eb;
+      cursor: pointer;
+      border: 3px solid #ffffff;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+    }
+    input[type="range"] {
+      -webkit-appearance: none;
+      appearance: none;
+      height: 6px;
+      border-radius: 3px;
+      background: #e2e8f0;
+      outline: none;
+    }
+    .fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .number-input::-webkit-inner-spin-button,
+    .number-input::-webkit-outer-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+    .number-input { -moz-appearance: textfield; }
+
+
+  </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+  <!-- Encabezado -->
+  <header class="bg-white border-b border-gray-200">
+    <div class="max-w-6xl mx-auto px-4 py-4 sm:py-6 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 bg-brand-600 rounded-lg flex items-center justify-center">
+          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+          </svg>
+        </div>
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Calculadora de Pr&eacute;stamos</h1>
+          <p class="text-sm text-gray-500 hidden sm:block">Estima tus pagos quincenales y el costo total de tu cr&eacute;dito</p>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto px-4 py-6 sm:py-10">
+    <div class="grid lg:grid-cols-5 gap-6 lg:gap-8">
+
+      <!-- Izquierda: Datos de entrada -->
+      <div class="lg:col-span-2 space-y-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-6">
+          <h2 class="text-lg font-semibold text-gray-900">Datos del Pr&eacute;stamo</h2>
+
+          <!-- Monto del Préstamo -->
+          <div>
+            <label class="flex items-center justify-between mb-2">
+              <span class="text-sm font-medium text-gray-700">Monto del Pr&eacute;stamo</span>
+              <div class="flex items-center bg-gray-100 rounded-lg overflow-hidden">
+                <span class="text-sm text-gray-500 pl-2">$</span>
+                <input id="loanAmountInput" type="text" value="15,000"
+                  oninput="onManualInput('loanAmount')"
+                  class="number-input w-28 bg-gray-100 text-right text-sm font-semibold text-gray-900 pr-2 py-1 focus:outline-none">
+              </div>
+            </label>
+            <input id="loanAmountRange" type="range" min="5000" max="25000" step="500" value="15000"
+              oninput="onSyncRange('loanAmount')"
+              class="w-full">
+            <div class="flex justify-between text-xs text-gray-400 mt-1">
+              <span>$5,000</span><span>$25,000</span>
+            </div>
+          </div>
+
+          <!-- Número de Quincenas -->
+          <div>
+            <label class="flex items-center justify-between mb-2">
+              <span class="text-sm font-medium text-gray-700">N&uacute;mero de Quincenas</span>
+              <div class="flex items-center bg-gray-100 rounded-lg overflow-hidden">
+                <input id="periodsInput" type="text" value="4"
+                  oninput="onManualInput('periods')"
+                  class="number-input w-12 bg-gray-100 text-right text-sm font-semibold text-gray-900 pl-2 py-1 focus:outline-none">
+                <span class="text-sm text-gray-500 pr-2 pl-1">pagos</span>
+              </div>
+            </label>
+            <input id="periodsRange" type="range" min="2" max="6" step="1" value="4"
+              oninput="onSyncRange('periods')"
+              class="w-full">
+            <div class="flex justify-between text-xs text-gray-400 mt-1">
+              <span>2 pagos</span><span>6 pagos</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Detalles del Crédito (computed) -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
+          <h2 class="text-lg font-semibold text-gray-900">Detalles del Cr&eacute;dito</h2>
+
+          <div class="space-y-3">
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-600">Tasa de inter&eacute;s</span>
+              <span id="displayRate" class="text-sm font-bold text-gray-900">1.8%</span>
+            </div>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-gray-600">Tasa quincenal efectiva</span>
+              <span id="displayPeriodRate" class="text-sm font-bold text-gray-900">7.50%</span>
+            </div>
+            <div class="pt-3 border-t border-gray-100 flex justify-between items-center">
+              <span class="text-sm font-medium text-gray-600">Comisi&oacute;n por apertura (2.5%)</span>
+              <span id="displayCommission" class="text-sm font-bold text-gray-900">$375.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Derecha: Resultados -->
+      <div class="lg:col-span-3 space-y-6">
+
+        <!-- Tarjeta de Resultado Principal -->
+        <div class="bg-gradient-to-br from-brand-700 to-brand-900 rounded-2xl shadow-lg p-6 sm:p-8 text-white">
+          <p class="text-brand-200 text-sm font-medium uppercase tracking-wider mb-1">Tu Pago Quincenal</p>
+          <div class="flex items-baseline gap-2">
+            <span id="biweeklyPayment" class="text-4xl sm:text-5xl font-bold">$4,478.51</span>
+            <span class="text-brand-200 text-sm">/ cada quincena (s/IVA)</span>
+          </div>
+          <div class="mt-4 pt-4 border-t border-white/20 grid grid-cols-2 gap-4 text-sm">
+            <div>
+              <p class="text-brand-200">Tasa de Inter&eacute;s</p>
+              <p id="heroRate" class="text-lg font-semibold">1.8%</p>
+            </div>
+            <div>
+              <p class="text-brand-200">N&uacute;mero de Pagos</p>
+              <p id="numPayments" class="text-lg font-semibold">4</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tarjetas Resumen -->
+        <div class="grid sm:grid-cols-3 gap-4">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+              <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Capital</span>
+            </div>
+            <p id="principalDisplay" class="text-xl font-bold text-gray-900">$15,000.00</p>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+              <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Intereses Totales</span>
+            </div>
+            <p id="totalInterest" class="text-xl font-bold text-gray-900">$2,914.05</p>
+          </div>
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
+            <div class="flex items-center gap-2 mb-2">
+              <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+              <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Costo Total</span>
+            </div>
+            <p id="totalCost" class="text-xl font-bold text-gray-900">$18,755.30</p>
+          </div>
+        </div>
+
+        <!-- Desglose de Costos (4 segments) -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+          <h3 class="text-lg font-semibold text-gray-900 mb-4">Desglose de Costos</h3>
+          <!-- Barra apilada -->
+          <div class="h-8 rounded-full overflow-hidden flex mb-4">
+            <div id="barPrincipal" class="bg-blue-500 transition-all duration-500" style="width:80%"></div>
+            <div id="barInterest" class="bg-amber-500 transition-all duration-500" style="width:15%"></div>
+            <div id="barIva" class="bg-purple-500 transition-all duration-500" style="width:3%"></div>
+            <div id="barCommission" class="bg-red-400 transition-all duration-500" style="width:2%"></div>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-blue-500 shrink-0"></div>
+              <div>
+                <p class="text-gray-500">Capital</p>
+                <p id="breakdownPrincipal" class="font-semibold text-gray-900">$15,000</p>
+                <p id="breakdownPrincipalPct" class="text-xs text-gray-400">80%</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-amber-500 shrink-0"></div>
+              <div>
+                <p class="text-gray-500">Intereses</p>
+                <p id="breakdownInterest" class="font-semibold text-gray-900">$2,914</p>
+                <p id="breakdownInterestPct" class="text-xs text-gray-400">15%</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-purple-500 shrink-0"></div>
+              <div>
+                <p class="text-gray-500">IVA</p>
+                <p id="breakdownIva" class="font-semibold text-gray-900">$466</p>
+                <p id="breakdownIvaPct" class="text-xs text-gray-400">3%</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-2">
+              <div class="w-3 h-3 rounded-full bg-red-400 shrink-0"></div>
+              <div>
+                <p class="text-gray-500">Comisi&oacute;n</p>
+                <p id="breakdownCommission" class="font-semibold text-gray-900">$375</p>
+                <p id="breakdownCommissionPct" class="text-xs text-gray-400">2%</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tabla de Amortización -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+          <button onclick="onToggleSchedule()" class="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors">
+            <h3 class="text-lg font-semibold text-gray-900">Tabla de Amortizaci&oacute;n</h3>
+            <svg id="scheduleArrow" class="w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+            </svg>
+          </button>
+          <div id="scheduleContainer" class="hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-sm">
+                <thead class="bg-gray-50 sticky top-0">
+                  <tr>
+                    <th class="text-left py-3 px-4 font-medium text-gray-500">Periodo</th>
+                    <th class="text-right py-3 px-3 font-medium text-gray-500">Pago c/IVA</th>
+                    <th class="text-right py-3 px-3 font-medium text-gray-500">Pago s/IVA</th>
+                    <th class="text-right py-3 px-3 font-medium text-gray-500">Com.&nbsp;Apertura</th>
+                    <th class="text-right py-3 px-3 font-medium text-gray-500">Intereses</th>
+                    <th class="text-right py-3 px-3 font-medium text-gray-500">IVA</th>
+                    <th class="text-right py-3 px-3 font-medium text-gray-500">Capital</th>
+                    <th class="text-right py-3 px-4 font-medium text-gray-500">Saldo</th>
+                  </tr>
+                </thead>
+                <tbody id="scheduleBody" class="divide-y divide-gray-100">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Pie de página -->
+  <footer class="border-t border-gray-200 mt-12">
+    <div class="max-w-6xl mx-auto px-4 py-6 text-center text-xs text-gray-400">
+      <p>Esta calculadora es solo con fines ilustrativos. Los t&eacute;rminos reales del pr&eacute;stamo pueden variar. Consulta a un asesor financiero para obtener cifras precisas.</p>
+    </div>
+  </footer>
+
+  <script src="calc.js"></script>
+  <script src="ui.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

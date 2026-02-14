@@ -11,14 +11,20 @@
         extend: {
           colors: {
             brand: {
-              50: '#eff6ff',
-              100: '#dbeafe',
-              200: '#bfdbfe',
-              500: '#3b82f6',
-              600: '#2563eb',
-              700: '#1d4ed8',
-              800: '#1e40af',
-              900: '#1e3a5f',
+              50:  '#f0f7f3',
+              100: '#d9ede1',
+              200: '#b3dbc3',
+              500: '#438D61',
+              600: '#3a7d55',
+              700: '#306949',
+              800: '#265439',
+              900: '#100F0F',
+            },
+            harmony: {
+              interest:   '#0A859E',
+              iva:        '#54AB58',
+              commission: '#DBDD5D',
+              light:      '#99DC9E',
             }
           }
         }
@@ -27,14 +33,23 @@
   </script>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
-    body { font-family: 'Inter', sans-serif; }
+    :root {
+      --brand-primary: #100F0F;
+      --brand-secondary: #438D61;
+      --brand-font: 'Greycliff CF', 'Inter', sans-serif;
+      --color-interest: #0A859E;
+      --color-iva: #54AB58;
+      --color-commission: #DBDD5D;
+      --color-light: #99DC9E;
+    }
+    body { font-family: var(--brand-font); }
     input[type="range"]::-webkit-slider-thumb {
       -webkit-appearance: none;
       appearance: none;
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background: #2563eb;
+      background: var(--brand-secondary);
       cursor: pointer;
       border: 3px solid #ffffff;
       box-shadow: 0 1px 3px rgba(0,0,0,0.3);
@@ -43,7 +58,7 @@
       width: 20px;
       height: 20px;
       border-radius: 50%;
-      background: #2563eb;
+      background: var(--brand-secondary);
       cursor: pointer;
       border: 3px solid #ffffff;
       box-shadow: 0 1px 3px rgba(0,0,0,0.3);
@@ -69,35 +84,20 @@
       margin: 0;
     }
     .number-input { -moz-appearance: textfield; }
+    .schedule-table { min-width: 640px; }
+    .schedule-arrow-open { transform: rotate(180deg); }
 
 
   </style>
 </head>
 <body class="bg-gray-50 min-h-screen">
 
-  <!-- Encabezado -->
-  <header class="bg-white border-b border-gray-200">
-    <div class="max-w-6xl mx-auto px-4 py-4 sm:py-6 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="w-10 h-10 bg-brand-600 rounded-lg flex items-center justify-center">
-          <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
-          </svg>
-        </div>
-        <div>
-          <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Calculadora de Pr&eacute;stamos</h1>
-          <p class="text-sm text-gray-500 hidden sm:block">Estima tus pagos quincenales y el costo total de tu cr&eacute;dito</p>
-        </div>
-      </div>
-    </div>
-  </header>
-
   <main class="max-w-6xl mx-auto px-4 py-6 sm:py-10">
     <div class="grid lg:grid-cols-5 gap-6 lg:gap-8">
 
       <!-- Izquierda: Datos de entrada -->
-      <div class="lg:col-span-2 space-y-6">
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-6">
+      <div class="contents lg:block lg:col-span-2 lg:space-y-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-6 order-1">
           <h2 class="text-lg font-semibold text-gray-900">Datos del Pr&eacute;stamo</h2>
 
           <!-- Monto del Préstamo -->
@@ -140,7 +140,7 @@
         </div>
 
         <!-- Detalles del Crédito (computed) -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 space-y-4 order-3">
           <h2 class="text-lg font-semibold text-gray-900">Detalles del Cr&eacute;dito</h2>
 
           <div class="space-y-3">
@@ -161,10 +161,10 @@
       </div>
 
       <!-- Derecha: Resultados -->
-      <div class="lg:col-span-3 space-y-6">
+      <div class="contents lg:block lg:col-span-3 lg:space-y-6">
 
         <!-- Tarjeta de Resultado Principal -->
-        <div class="bg-gradient-to-br from-brand-700 to-brand-900 rounded-2xl shadow-lg p-6 sm:p-8 text-white">
+        <div class="bg-gradient-to-br from-brand-700 to-brand-900 rounded-2xl shadow-lg p-6 sm:p-8 text-white order-2">
           <p class="text-brand-200 text-sm font-medium uppercase tracking-wider mb-1">Tu Pago Quincenal</p>
           <div class="flex items-baseline gap-2">
             <span id="biweeklyPayment" class="text-4xl sm:text-5xl font-bold">$4,478.51</span>
@@ -183,24 +183,24 @@
         </div>
 
         <!-- Tarjetas Resumen -->
-        <div class="grid sm:grid-cols-3 gap-4">
+        <div class="grid sm:grid-cols-3 gap-4 order-4">
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
             <div class="flex items-center gap-2 mb-2">
-              <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+              <div class="w-3 h-3 rounded-full bg-brand-500"></div>
               <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Capital</span>
             </div>
             <p id="principalDisplay" class="text-xl font-bold text-gray-900">$15,000.00</p>
           </div>
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
             <div class="flex items-center gap-2 mb-2">
-              <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+              <div class="w-3 h-3 rounded-full bg-harmony-interest"></div>
               <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Intereses Totales</span>
             </div>
             <p id="totalInterest" class="text-xl font-bold text-gray-900">$2,914.05</p>
           </div>
           <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-5">
             <div class="flex items-center gap-2 mb-2">
-              <div class="w-3 h-3 rounded-full bg-emerald-500"></div>
+              <div class="w-3 h-3 rounded-full bg-brand-900"></div>
               <span class="text-xs font-medium text-gray-500 uppercase tracking-wider">Costo Total</span>
             </div>
             <p id="totalCost" class="text-xl font-bold text-gray-900">$18,755.30</p>
@@ -208,18 +208,18 @@
         </div>
 
         <!-- Desglose de Costos (4 segments) -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-6 order-5">
           <h3 class="text-lg font-semibold text-gray-900 mb-4">Desglose de Costos</h3>
           <!-- Barra apilada -->
           <div class="h-8 rounded-full overflow-hidden flex mb-4">
-            <div id="barPrincipal" class="bg-blue-500 transition-all duration-500" style="width:80%"></div>
-            <div id="barInterest" class="bg-amber-500 transition-all duration-500" style="width:15%"></div>
-            <div id="barIva" class="bg-purple-500 transition-all duration-500" style="width:3%"></div>
-            <div id="barCommission" class="bg-red-400 transition-all duration-500" style="width:2%"></div>
+            <div id="barPrincipal" class="bg-brand-500 transition-all duration-500" style="width:80%"></div>
+            <div id="barInterest" class="bg-harmony-interest transition-all duration-500" style="width:15%"></div>
+            <div id="barIva" class="bg-harmony-iva transition-all duration-500" style="width:3%"></div>
+            <div id="barCommission" class="bg-harmony-commission transition-all duration-500" style="width:2%"></div>
           </div>
           <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 text-sm">
             <div class="flex items-center gap-2">
-              <div class="w-3 h-3 rounded-full bg-blue-500 shrink-0"></div>
+              <div class="w-3 h-3 rounded-full bg-brand-500 shrink-0"></div>
               <div>
                 <p class="text-gray-500">Capital</p>
                 <p id="breakdownPrincipal" class="font-semibold text-gray-900">$15,000</p>
@@ -227,7 +227,7 @@
               </div>
             </div>
             <div class="flex items-center gap-2">
-              <div class="w-3 h-3 rounded-full bg-amber-500 shrink-0"></div>
+              <div class="w-3 h-3 rounded-full bg-harmony-interest shrink-0"></div>
               <div>
                 <p class="text-gray-500">Intereses</p>
                 <p id="breakdownInterest" class="font-semibold text-gray-900">$2,914</p>
@@ -235,7 +235,7 @@
               </div>
             </div>
             <div class="flex items-center gap-2">
-              <div class="w-3 h-3 rounded-full bg-purple-500 shrink-0"></div>
+              <div class="w-3 h-3 rounded-full bg-harmony-iva shrink-0"></div>
               <div>
                 <p class="text-gray-500">IVA</p>
                 <p id="breakdownIva" class="font-semibold text-gray-900">$466</p>
@@ -243,7 +243,7 @@
               </div>
             </div>
             <div class="flex items-center gap-2">
-              <div class="w-3 h-3 rounded-full bg-red-400 shrink-0"></div>
+              <div class="w-3 h-3 rounded-full bg-harmony-commission shrink-0"></div>
               <div>
                 <p class="text-gray-500">Comisi&oacute;n</p>
                 <p id="breakdownCommission" class="font-semibold text-gray-900">$375</p>
@@ -254,16 +254,16 @@
         </div>
 
         <!-- Tabla de Amortización -->
-        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden">
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden order-6">
           <button onclick="onToggleSchedule()" class="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors">
             <h3 class="text-lg font-semibold text-gray-900">Tabla de Amortizaci&oacute;n</h3>
-            <svg id="scheduleArrow" class="w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg id="scheduleArrow" class="w-5 h-5 text-gray-400 transition-transform duration-200 schedule-arrow-open" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
           </button>
-          <div id="scheduleContainer" class="hidden">
+          <div id="scheduleContainer">
             <div class="overflow-x-auto">
-              <table class="w-full text-sm">
+              <table class="w-full text-sm schedule-table">
                 <thead class="bg-gray-50 sticky top-0">
                   <tr>
                     <th class="text-left py-3 px-4 font-medium text-gray-500">Periodo</th>

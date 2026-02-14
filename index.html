@@ -90,9 +90,9 @@
 
   </style>
 </head>
-<body class="bg-gray-50 min-h-screen">
+<body class="bg-transparent">
 
-  <main class="max-w-6xl mx-auto px-4 py-6 sm:py-10">
+  <main class="max-w-6xl mx-auto px-4 py-2 sm:py-4">
     <div class="grid lg:grid-cols-5 gap-6 lg:gap-8">
 
       <!-- Izquierda: Datos de entrada -->
@@ -257,11 +257,11 @@
         <div class="bg-white rounded-2xl shadow-sm border border-gray-200 overflow-hidden order-6">
           <button onclick="onToggleSchedule()" class="w-full flex items-center justify-between p-6 hover:bg-gray-50 transition-colors">
             <h3 class="text-lg font-semibold text-gray-900">Tabla de Amortizaci&oacute;n</h3>
-            <svg id="scheduleArrow" class="w-5 h-5 text-gray-400 transition-transform duration-200 schedule-arrow-open" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg id="scheduleArrow" class="w-5 h-5 text-gray-400 transition-transform duration-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
             </svg>
           </button>
-          <div id="scheduleContainer">
+          <div id="scheduleContainer" class="hidden">
             <div class="overflow-x-auto">
               <table class="w-full text-sm schedule-table">
                 <thead class="bg-gray-50 sticky top-0">
@@ -288,8 +288,8 @@
   </main>
 
   <!-- Pie de página -->
-  <footer class="border-t border-gray-200 mt-12">
-    <div class="max-w-6xl mx-auto px-4 py-6 text-center text-xs text-gray-400">
+  <footer class="border-t border-gray-200 mt-4">
+    <div class="max-w-6xl mx-auto px-4 py-3 text-center text-xs text-gray-400">
       <p>Esta calculadora es solo con fines ilustrativos. Los t&eacute;rminos reales del pr&eacute;stamo pueden variar. Consulta a un asesor financiero para obtener cifras precisas.</p>
     </div>
   </footer>
@@ -297,5 +297,21 @@
   <script src="calc.js"></script>
   <script src="ui.js"></script>
   <script src="app.js"></script>
+  <script>
+    /* Iframe auto-resize: posts content height to parent so Elementor
+       can size the iframe dynamically instead of using a fixed height. */
+    (() => {
+      let lastHeight = 0;
+      const postHeight = () => {
+        const h = document.documentElement.scrollHeight;
+        if (h !== lastHeight) {
+          lastHeight = h;
+          window.parent.postMessage({ type: "calculadora-resize", height: h }, "*");
+        }
+      };
+      new ResizeObserver(postHeight).observe(document.body);
+      postHeight();
+    })();
+  </script>
 </body>
 </html>
